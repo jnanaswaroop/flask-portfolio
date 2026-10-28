@@ -1,14 +1,14 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('DockerHub')
-        IMAGE_NAME = 'theshubhamgour/flask-portfolio'
+        DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB-LOGIN-CREDS')
+        IMAGE_NAME = 'jnanaswaroop/flask-portfolio'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/theshubhamgour/flask-portfolio.git'
+                git 'https://github.com/jnanaswaroop/flask-portfolio.git'
             }
         }
 
@@ -28,7 +28,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
                     sh 'docker push $IMAGE_NAME:$BUILD_NUMBER'
                 }
             }
