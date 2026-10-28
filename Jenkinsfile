@@ -44,7 +44,17 @@ pipeline {
 
         stage('Deploy to Stage') {
             steps {
-                sh 'docker run -d -p 5000:5000 $IMAGE_NAME:$BUILD_NUMBER'
+                sh '''
+                    # Stop and remove the previous application container
+                    docker rm -f flask-portfolio || true
+
+                    # Start the new container
+                    docker run -d \
+                        --name flask-portfolio \
+                        --restart unless-stopped \
+                        -p 5000:5000 \
+                        "$IMAGE_NAME:$BUILD_NUMBER"
+                '''
             }
         }
     }
