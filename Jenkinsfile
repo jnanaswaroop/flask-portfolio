@@ -28,10 +28,12 @@ pipeline {
 
         stage('Deploy to Stage') {
             steps {
-                docker rm -f flask-portfolio || true
+                sh '''
+                    docker rm -f flask-portfolio || true
 
-                // Start the new container
-                docker run -d --name flask-portfolio -p 5000:5000 $IMAGE_NAME:$BUILD_NUMBER'
+                    # Start the new container
+                    docker run -d --name flask-portfolio -p 5000:5000 $IMAGE_NAME:$BUILD_NUMBER'
+                '''
             }
         }
     }
